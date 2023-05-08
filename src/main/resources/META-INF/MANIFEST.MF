@@ -1,0 +1,5 @@
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.martijncourteaux.multitouchgestures
+Require-Bundle: system.bundle
+Bundle-Version: 1.0
+Export-Package: com.martijncourteaux.multitouchgestures, com.martijncourteaux.multitouchgestures.event;version="1.0"
