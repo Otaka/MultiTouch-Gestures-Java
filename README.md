@@ -9,7 +9,7 @@ Read this is you came here because `com.apple.eawt` is not working
 ------------------------------------------------------------------
 
 You landed on this page, probably because you are unable to make `com.apple.eawt` compile
-on newer versions of Java (JDK 7 and higher). However after creating this project, I found that there is
+on newer versions of Java (JDK 7 and higher). However, after creating this project, I found that there is
 a workaround. You should have a look at this question on StackOverflow:
 [Using internal sun classes with javac](https://stackoverflow.com/questions/4065401/using-internal-sun-classes-with-javac).
 All the classes in the `com.apple.eawt` package are not included in the `$JAVA_HOME/lib/ct.sym` file, which makes
@@ -20,7 +20,8 @@ the compilation fail with an error like:
 
 Adding `-XDignore.symbol.file` to your compiler flags solves it.
 
-However, this project still has a purpose, I believe, since you can have smooth two finger scrolling.
+However, this project still has a purpose, I believe, since you can have smooth two finger scrolling without any hassle.
+
 The Apple gesture features don't report scroll events, which are way smoother than the ones you get using
 a classic `MouseWheelListener`.
 
@@ -35,31 +36,37 @@ your platform.
 Building
 --------
 
-Building the native library will automatically place the resuting binary in the resources folder
-of the Java project. The Java library will automatically extract the required native binary to
-a temporary file (that will be deleted after the application quits) and link against it. So,
-the only thing you will have to do to be able to use this is to build the native library and
-include the Java project as a dependency in Maven or add it manually to the classpath.
+Currently, there are two architectures that are supported by OSX: x86_64 and arm64. This library supports both.
+
+I checked that you can easily build x64 library on Mac M1(Arm64), but I am not sure about the reverse, because do not have x64 Mac.
+
+At first, you should build native library with the following command:
+
+```
+export JAVA_HOME = {YOUR_JDK_FOLDER_LOCATION}
+cd {PROJECT_ROOT}/native
+sh build_native_library.sh
+```
+
+After building native libraries you can execute maven build as always: 
+```
+mvn clean install
+```
 
 ### Java
-This project is a Maven project made in NetBeans on the Java side of it. So just open this in NetBeans
+This project is a Maven project that you can open in any Java IDE. So just open it in IntelliJ IDEA or NetBeans
 and you are basically good to go. You can compile this manually as well.
 
 ### Native Mac OS X
-This is an Xcode project that resides in the mac/ directory. Just open the project in Xcode and hit
-"Run". This will produce the native library file (ending in .dylib) on the right location.
+This is simple Objective-C file that resides in the `native/` directory. There is also a shell script `native/build_native_library.sh` that can compile the file and put result binaries in appropriate place.
 
 Testing
 -------
 There is a test file provided in:
 
-    src/main/java/com/martijncourteaux/multitouchgestures/demo/DemoSimpleGestures.java
+    src/test/java/com/martijncourteaux/multitouchgestures/DemoSimpleGestures.java
 
 You can have a look at that file for a sample.
-
-You can see how this compares to the Apple Gesture support using this demo file:
-
-    src/main/java/com/martijncourteaux/multitouchgestures/demo/DemoCompareGestures.java
 
 Usage
 -----
@@ -89,6 +96,9 @@ Where each event type has these parameters:
  - `absMouseY`: y-coordinate of the mouse on the screen
  - `phase`: a `GesturePhase` enum indicating what phase the gesture is in.
 
+`scroll` event has additional parameter:
+ - `subtype` - enum indicating what kind device is used for scrolling (`MOUSE` or `TABLET`)
+
 A `GesturePhase` is an enum containing these values:
 
  - `MOMENTUM`: Indicates this event is caused by momentum (like OS X).
@@ -104,5 +114,6 @@ Remark for OS X
 ---------------
 The built-in Java scrolling listeners are not as smooth as the one provided in this project.
 So I highly recommend checking it out. This gives you the native OS X scrolling experience.
+
 
 

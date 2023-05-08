@@ -3,44 +3,34 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.martijncourteaux.multitouchgestures.demo;
+package com.martijncourteaux.multitouchgestures;
 
-import com.martijncourteaux.multitouchgestures.GestureAdapter;
-import com.martijncourteaux.multitouchgestures.MultiTouchGestureUtilities;
+import com.martijncourteaux.multitouchgestures.event.GestureEvent;
 import com.martijncourteaux.multitouchgestures.event.MagnifyGestureEvent;
 import com.martijncourteaux.multitouchgestures.event.RotateGestureEvent;
 import com.martijncourteaux.multitouchgestures.event.ScrollGestureEvent;
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 /**
- *
  * @author martijn
  */
-public class DemoSimpleGestures
-{
-
+public class DemoSimpleGestures {
+    private static long lastTouchPadScrollTime;
     private static double a = 0, l = 50;
     private static double x, y;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
 
         JFrame frame = new JFrame();
         frame.setTitle("MultiTouch Gestures Demo");
-        final JComponent comp = new JComponent()
-        {
+        final JComponent comp = new JComponent() {
 
             @Override
-            protected void paintComponent(Graphics gg)
-            {
+            protected void paintComponent(Graphics gg) {
                 super.paintComponent(gg);
                 Graphics2D g = (Graphics2D) gg;
 
@@ -51,6 +41,13 @@ public class DemoSimpleGestures
             }
 
         };
+
+        comp.addMouseWheelListener(e -> {
+            if (System.currentTimeMillis() - lastTouchPadScrollTime < 5000) {
+                return;
+            }
+            System.out.println("Scroll with mouse wheel: " + e.getWheelRotation() + " p:" + e.getPreciseWheelRotation());
+        });
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(comp, BorderLayout.CENTER);
@@ -60,31 +57,35 @@ public class DemoSimpleGestures
         frame.pack();
         frame.setVisible(true);
 
-        MultiTouchGestureUtilities.addGestureListener(comp, new GestureAdapter()
-        {
+        MultiTouchGestureUtilities.addGestureListener(comp, new GestureAdapter() {
 
             @Override
-            public void magnify(MagnifyGestureEvent e)
-            {
+            public void magnify(MagnifyGestureEvent e) {
+                lastTouchPadScrollTime = System.currentTimeMillis();
+                System.out.println("Magnify: " + e.getMagnification());
                 l *= 1.0 + e.getMagnification();
                 comp.repaint();
             }
 
             @Override
-            public void rotate(RotateGestureEvent e)
-            {
+            public void rotate(RotateGestureEvent e) {
+                lastTouchPadScrollTime = System.currentTimeMillis();
+                System.out.println("Rotate: " + e.getRotation());
                 a += e.getRotation();
                 comp.repaint();
             }
 
             @Override
-            public void scroll(ScrollGestureEvent e)
-            {
+            public void scroll(ScrollGestureEvent e) {
+                if (e.getSubtype() != GestureEvent.Subtype.TABLET) {
+                    return;
+                }
+                lastTouchPadScrollTime = System.currentTimeMillis();
+                System.out.println("Scroll with touch pad: " + e.getDeltaX() + ", " + e.getDeltaY()+ ", phase:"+e.getPhase());
                 x += e.getDeltaX();
                 y += e.getDeltaY();
                 comp.repaint();
             }
-
         });
     }
 }

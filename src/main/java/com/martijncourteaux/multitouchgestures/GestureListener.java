@@ -10,14 +10,12 @@ import com.martijncourteaux.multitouchgestures.event.RotateGestureEvent;
 import com.martijncourteaux.multitouchgestures.event.ScrollGestureEvent;
 
 /**
- *
  * @author martijn
  */
-public interface GestureListener
-{
+public interface GestureListener {
     public void magnify(MagnifyGestureEvent e);
-    
+
     public void rotate(RotateGestureEvent e);
-    
+
     public void scroll(ScrollGestureEvent e);
 }

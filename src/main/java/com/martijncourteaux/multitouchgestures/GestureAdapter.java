@@ -10,26 +10,19 @@ import com.martijncourteaux.multitouchgestures.event.RotateGestureEvent;
 import com.martijncourteaux.multitouchgestures.event.ScrollGestureEvent;
 
 /**
- *
  * @author martijn
  */
-public abstract class GestureAdapter implements GestureListener
-{
+public abstract class GestureAdapter implements GestureListener {
 
     @Override
-    public void magnify(MagnifyGestureEvent e)
-    {
+    public void magnify(MagnifyGestureEvent e) {
     }
 
     @Override
-    public void rotate(RotateGestureEvent e)
-    {
+    public void rotate(RotateGestureEvent e) {
     }
 
     @Override
-    public void scroll(ScrollGestureEvent e)
-    {
+    public void scroll(ScrollGestureEvent e) {
     }
-    
-    
 }

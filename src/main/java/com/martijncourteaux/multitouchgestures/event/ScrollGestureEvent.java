@@ -8,28 +8,28 @@ package com.martijncourteaux.multitouchgestures.event;
 import javax.swing.JComponent;
 
 /**
- *
  * @author martijn
  */
-public class ScrollGestureEvent extends GestureEvent
-{
+public class ScrollGestureEvent extends GestureEvent {
     private final double dX, dY;
+    private final Subtype subtype;
 
-    public ScrollGestureEvent(JComponent source, double mouseX, double mouseY, double absMouseX, double absMouseY, Phase phase, double dX, double dY)
-    {
+    public ScrollGestureEvent(JComponent source, double mouseX, double mouseY, double absMouseX, double absMouseY, Phase phase, double dX, double dY, Subtype subtype) {
         super(source, mouseX, mouseY, absMouseX, absMouseY, phase);
         this.dX = dX;
         this.dY = dY;
+        this.subtype = subtype;
     }
 
-    public double getDeltaX()
-    {
+    public double getDeltaX() {
         return dX;
     }
 
-    public double getDeltaY()
-    {
+    public double getDeltaY() {
         return dY;
     }
-    
+
+    public Subtype getSubtype() {
+        return subtype;
+    }
 }

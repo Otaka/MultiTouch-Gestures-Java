@@ -1,5 +1,4 @@
 *.log
 target/
 *.dylib
-mac/mtg_mac.xcodeproj/project.xcworkspace/
-mac/mtg_mac.xcodeproj/xcuserdata/
+.idea/
