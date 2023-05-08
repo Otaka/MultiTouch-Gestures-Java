@@ -70,13 +70,26 @@ You can have a look at that file for a sample.
 
 Usage
 -----
-The usage is pretty similar to Apple's AppleJavaExtensions package from Java 6. You build your
+At first add dependency to your pom.xml:
+```
+<dependency>
+    <groupId>io.github.otaka</groupId>
+    <artifactId>MultiTouchGesturesJava</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+Java part is pretty similar to Apple's AppleJavaExtensions package from Java 6. You build your
 Swing frame, just as regular. Then you can do this:
 
-    MultiTouchGestureUtilities.addGestureListener(comp, listener);
+    MultiTouchGestureUtilities.addGestureListener(component, listener);
 
-Where `listener` is a `MultiTouchGestureListener` and `comp` is the JComponent you want to add
-the listener to. **When you dispose/remove a JFrame or component with a listener, you *MUST*
+Where `listener` is a `MultiTouchGestureListener` and `component` is the JComponent you want to add
+the listener to. 
+
+Library will automatically write appropriate native library to the temporary directory load it, and delete it before jvm exit.
+
+**When you dispose/remove a JFrame or component with a listener, you *MUST*
 remove the `MultiTouchGestureListener` using one of following techniques:**
 
     MultiTouchGestureUtilities.removeGestureListener(comp, listener);
